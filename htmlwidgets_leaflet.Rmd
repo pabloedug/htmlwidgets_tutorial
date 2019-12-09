@@ -38,15 +38,15 @@ data("airports")
 
 La función leaflet(), sin más, inicializa un objeto de R tipo leaflet. A partir de aquí, se trata de ir añadiendo capas a ese objeto, mediante las funciones disponibles. Destacamos en este momento dos:
 
-- La función addTiles()
-- La función addMarkers()
+- La función addTiles(): es la que "rellena" el mapa con imagen. Por defecto añade OpenStreetMap map tiles
+- La función addMarkers(): añade puntos en el mapa. Los especificados al llamar la función, o bien los contenidos en el parámetro data del objeto leaflet inicial.
 
 *Modifica el siguiente código para que la latitud y longitud sean 40.41694 y -3.70361, respectivamente*:
 
 ```{r leaflet-basic, exercise=TRUE, exercise.eval=TRUE}
 m <- leaflet()
 m <- addTiles(m)
-m <- addMarkers(m, lat=40.5453, lng=-3.69611, popup="UAM")
+m <- addMarkers(m, lat=40.5453, lng=-3.69611)
 m
 ```
 
@@ -70,6 +70,30 @@ m
 
 ## CUSTOMIZACION
 
+### Añadir popups
+
+En primer lugar, la mayoría de funciones layer admiten el argumento popup, para añadir indicaciones.
+
+*Modifica el siguiente código para añadir el mensaje "UAM" al marcador*:
+
+```{r leaflet-basic-popup, exercise=TRUE, exercise.eval=TRUE}
+m <- leaflet()
+m <- addTiles(m)
+m <- addMarkers(m, lat=40.5453, lng=-3.69611)
+m
+```
+
+En caso de querer emplear alguna columna del data, ello se puede realizar mediante el símbolo ~. ~ name significaría emplear la columna denominada "name".
+
+*Modifica el siguiente código para añadir la columna name de airpors como popup*:
+
+```{r leaflet-data-popup, exercise=TRUE, exercise.eval=TRUE}
+m <- leaflet(data = head(airports))
+m <- addTiles(m)
+m <- addMarkers(m)
+# 
+m
+```
 
 
 ## EXPORTACION
