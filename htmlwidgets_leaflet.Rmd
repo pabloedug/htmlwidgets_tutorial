@@ -39,7 +39,7 @@ data("airports")
 La función leaflet(), sin más, inicializa un objeto de R tipo leaflet. A partir de aquí, se trata de ir añadiendo capas a ese objeto, mediante las funciones disponibles. Destacamos en este momento dos:
 
 - La función addTiles(): es la que "rellena" el mapa con imagen. Por defecto añade OpenStreetMap map tiles
-- La función addMarkers(): añade puntos en el mapa. Los especificados al llamar la función, o bien los contenidos en el parámetro data del objeto leaflet inicial.
+- La función addMarkers(): añade puntos en el mapa (los especificados al llamar la función, o bien los contenidos en el parámetro data del objeto leaflet inicial). Su aspecto por defecto son "dropped pins".
 
 *Modifica el siguiente código para que la latitud y longitud sean 40.41694 y -3.70361, respectivamente*:
 
@@ -83,9 +83,14 @@ m <- addMarkers(m, lat=40.5453, lng=-3.69611)
 m
 ```
 
+```{r leaflet-basic-popup-hint}
+addMarkers(m, popup = "UAM")
+```
+
+
 En caso de querer emplear alguna columna del data, ello se puede realizar mediante el símbolo ~. ~ name significaría emplear la columna denominada "name".
 
-*Modifica el siguiente código para añadir la columna name de airpors como popup*:
+*Modifica el siguiente código para añadir la columna name de airpors como popup.*:
 
 ```{r leaflet-data-popup, exercise=TRUE, exercise.eval=TRUE}
 m <- leaflet(data = head(airports))
@@ -94,6 +99,21 @@ m <- addMarkers(m)
 # 
 m
 ```
+
+```{r leaflet-data-popup-hint}
+addMarkers(m, popup = ~ name)
+```
+
+```{r leaflet-data-popup-quiz}
+quiz(
+  question("Si en vez del argumento popup utilizas el argumento label, ¿qué ocurrre?",
+    answer("No aparece nada"),
+    answer("Aparecen las etiquetas al pasar el cursor por encima", correct = TRUE),
+    answer("Desaparecen los iconos y son sustituidos por etiquetas")
+  )
+)
+```
+
 
 
 ## EXPORTACION
