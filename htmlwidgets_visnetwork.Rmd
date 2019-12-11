@@ -1,0 +1,49 @@
+---
+title: "VISNETWORK"
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(visNetwork)
+library(nycflights13)
+knitr::opts_chunk$set(echo = FALSE)
+data("airports")
+data("flights")
+```
+
+## INTRODUCCION
+
+### vis.js (JS)
+
+- <a href="http://visjs.org" target="_blank">vis.js</a> es una librería Javascript (JS) con una serie de componentes, entre los que está Network para la visualización de redes.
+
+- Representación sencilla de información en red. Multitud de opciones de enriquecimiento de la visualización, incluida la posibilidad de utilizar filtros de nodos.
+
+### visNetwork para R
+
+- Interfaz entre R y el componente Network de la librería vis.js.
+
+- Disponible en <a href="https://cran.r-project.org/web/packages/visNetwork/index.html" target="_blank">repositorio CRAN</a>.
+
+- <a href="https://datastorm-open.github.io/visNetwork/" target="_blank">Página web de consulta</a> (Github project site) muy completa.
+
+## GENERACION BASICA
+
+Son necesarios dos dataframe para representar un grafo:
+
+- nodos. Con columna *id*.
+- enlaces. Con columnas *from* y *to* (entre ids del dataframe de nodos).
+
+Los id han de ser numéricos. Vamos a ver cómo se haría con los datos del paquete <a href="https://cran.r-project.org/web/packages/nycflights13/nycflights13.pdf" target="_blank">nycflights13</a> (vamos a trabajar con el dataset *airports* para los nodos y el dataset *flights* para los enlaces entre estos):
+
+```{r leaflet-basic, exercise=TRUE, exercise.eval=TRUE}
+edges <- flights[(flights$month==1 & flights$day==1 & flights$distance>2000),]
+nodes <- airports[airports$faa %in% c(edges$origin,edges$dest),]
+nodes$id <- 1:nrow(nodes)
+nodes$label <- nodes$name
+edges$from <- match(edges$origin,nodes$faa)
+edges$to <- match(edges$dest,nodes$faa)
+visNetwork(nodes, edges, width = "100%")
+```
