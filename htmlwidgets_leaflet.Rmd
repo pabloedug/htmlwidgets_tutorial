@@ -36,10 +36,10 @@ data("airports")
 
 ### Función leaflet()
 
-La función leaflet(), sin más, inicializa un objeto de R tipo leaflet. A partir de aquí, se trata de ir añadiendo capas a ese objeto, mediante las funciones disponibles. Destacamos en este momento dos:
+La función leaflet(), sin más, inicializa un objeto de R tipo leaflet. A partir de aquí, se trata de ir añadiendo capas a ese objeto, mediante las funciones disponibles (funciones-layer). Destacamos en este momento dos:
 
-- La función addTiles(): es la que "rellena" el mapa con imagen. Por defecto añade OpenStreetMap map tiles
-- La función addMarkers(): añade puntos en el mapa (los especificados al llamar la función, o bien los contenidos en el parámetro data del objeto leaflet inicial). Su aspecto por defecto son "dropped pins".
+- La función addTiles(): es la que "rellena" el mapa con imagen. Por defecto añade OpenStreetMap tiles.
+- La función addMarkers(): añade puntos (marcadores) en el mapa (los especificados al llamar la función, o bien los contenidos en el parámetro *data* del objeto leaflet inicial). Su aspecto por defecto son dropped-pins.
 
 *Modifica el siguiente código para que la latitud y longitud sean 40.41694 y -3.70361, respectivamente*:
 
@@ -52,11 +52,11 @@ m
 
 ### Parámetro *data*
 
-En vez de especificar localizaciones concretas mediante los argumentos lat y lng, podemos usar el parámetro *data* en la función leaflet. Este admite formatos específicos de paquetes de mapas (*sp* y *maps*), así como:  
+En vez de especificar localizaciones concretas (en la función addMarkers() y otras) mediante los argumentos lat y lng, podemos usar el parámetro *data* definido en la función leaflet(). Este admite formatos específicos de paquetes de mapas (*sp* y *maps*), así como:  
 
 
 - una matriz de longitudes y latitudes (dos columnas).  
-- un dataframe en que haya, al menos, dos columnas (lat y lng). Normalmente deduce qué columnas contienen latitudes y longitudes, si tienen nombres (sin discriminar mayúsculas) *lat*, *latitude*, *lng*, *lon*, *long*, *longitude*. Si tienen otro nombre, siempre se puede identificar mediante los argumentos lng y lat.
+- un dataframe en que haya, al menos, dos columnas (lat y lng). Normalmente deduce qué columnas contienen latitudes y longitudes, si tienen nombres (sin discriminar mayúsculas) lat, latitude, lng, lon, long, longitude. Si tienen otro nombre, siempre se pueden identificar explícitamente.
 
 *Modifica el siguiente código para representar, en vez de la cabecera (head), el cierre (tail) del objeto airports*:
 
@@ -70,9 +70,11 @@ m
 
 ## CUSTOMIZACION
 
-### Añadir popups
+Existen muchas opciones de customización de los mapas, de las que aquí destacamos unas pocas relacionadas con los marcadores:
 
-En primer lugar, la mayoría de funciones layer admiten el argumento popup, para añadir indicaciones.
+### Añadir popups o etiquetas
+
+Las funciones-marker admiten el argumento *popup*, para añadir texto a los marcadores.
 
 *Modifica el siguiente código para añadir el mensaje "UAM" al marcador*:
 
@@ -84,13 +86,13 @@ m
 ```
 
 ```{r leaflet-basic-popup-hint}
-addMarkers(m, popup = "UAM")
+addMarkers(m, lat=40.5453, lng=-3.69611, popup = "UAM")
 ```
 
+<br>
+En caso de querer utilizar alguna columna del objeto data que contenga los popups, ello se puede realizar mediante el símbolo **~** (*~name*, por ejemplo, significaría emplear la columna denominada "name" en el objeto data).
 
-En caso de querer emplear alguna columna del data, ello se puede realizar mediante el símbolo ~. ~ name significaría emplear la columna denominada "name".
-
-*Modifica el siguiente código para añadir la columna name de airpors como popup.*:
+*Modifica el siguiente código para añadir la columna name de airports como popup.*:
 
 ```{r leaflet-data-popup, exercise=TRUE, exercise.eval=TRUE}
 m <- leaflet(data = head(airports))
@@ -101,20 +103,58 @@ m
 ```
 
 ```{r leaflet-data-popup-hint}
-addMarkers(m, popup = ~ name)
+addMarkers(m, popup = ~name)
 ```
 
 ```{r leaflet-data-popup-quiz}
 quiz(
-  question("Si en vez del argumento popup utilizas el argumento label, ¿qué ocurrre?",
-    answer("No aparece nada"),
-    answer("Aparecen las etiquetas al pasar el cursor por encima", correct = TRUE),
-    answer("Desaparecen los iconos y son sustituidos por etiquetas")
+  question(allow_retry = TRUE,"Si en vez del argumento *popup* se utiliza el argumento *label*, ¿qué ocurre?",
+    answer("No aparece nada."),
+    answer("Aparecen las etiquetas al pasar el cursor por encima de los marcadores.", correct = TRUE),
+    answer("Desaparecen los iconos dropped-pins y son sustituidos por etiquetas de texto.")
   )
 )
 ```
 
+### Modificar la forma de los marcadores:
 
+Los marcadores se pueden representar como círculos, rectángulos, incluso como imágenes...
+
+*Modifica el siguiente código para que los puntos se representen como círculos (función addCircleMarkers), en vez de dropped-pins.*:
+
+```{r leaflet-data-circlemarkers, exercise=TRUE, exercise.eval=TRUE}
+m <- leaflet(data = head(airports))
+m <- addTiles(m)
+m <- addMarkers(m)
+# 
+m
+```
+
+```{r leaflet-data-circlemarkers-hint}
+addCircleMarkers(m)
+```
+
+### Añadir enlaces a internet:
+
+En tanto lo que se genera es un HTML, se pueden incluir elementos (tags) html, que enriquecen todavía más los marcadores. Por ejemplo, el texto de los popups puede ser un enlace a internet.
+
+*Modifica el siguiente código para que la latitud y longitud sean 40.41694 y -3.70361, respectivamente, así como modifica el popup con el texto "Puerta del Sol" y que este sea un enlace a la página de la wikipedia sobre la Puerta del Sol*:
+
+```{r leaflet-markers-link, exercise=TRUE, exercise.eval=TRUE}
+m <- leaflet()
+m <- addTiles(m)
+m <- addMarkers(m, lat=40.5453, lng=-3.69611, popup = "<a href='http://www.uam.es/UAM/Home.htm?language=es' target='_blank'>UAM</a>")
+m
+```
+
+```{r leaflet-markers-link-hint}
+addMarkers(m, lat=40.41694, lng=-3.70361, popup = "<a href='https://es.wikipedia.org/wiki/Puerta_del_Sol' target='_blank'>Puerta del Sol</a>")
+m
+```
+
+### Otras opciones:
+
+La librería leaflet, y el paquete de R para interactuar con la misma, tiene otras muchas opciones (colores, leyendas, imágenes...) para realizar mapas muy ricos. No dejes de consultar la <a href="http://rstudio.github.io/leaflet/" target="_blank">página de ayuda</a> para descubrirlas y practicar con las mismas.
 
 ## EXPORTACION
 
