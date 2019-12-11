@@ -4,7 +4,10 @@ Este repositorio incluye un conjunto de ficheros .Rmd con introducción a distin
 
 Los ficheros son los siguientes:
 
-- **Htmlwidgets_leaflet.Rmd**: cómo generar mapas interactivos mediante el paquete *leaflet*.
+- **htmlwidgets_leaflet.Rmd**: cómo generar mapas interactivos mediante el paquete *leaflet*.
+- **htmlwidgets_dygraphs.Rmd**:
+- **htmlwidgets_datatables.Rmd**:
+- **htmlwidgets_visnetwork.Rmd**:
 
 
 # Uso
