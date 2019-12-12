@@ -36,14 +36,46 @@ Son necesarios dos dataframe para representar un grafo:
 - nodos. Con columna *id*.
 - enlaces. Con columnas *from* y *to* (entre ids del dataframe de nodos).
 
-Los id han de ser numéricos. Vamos a ver cómo se haría con los datos del paquete <a href="https://cran.r-project.org/web/packages/nycflights13/nycflights13.pdf" target="_blank">nycflights13</a> (vamos a trabajar con el dataset *airports* para los nodos y el dataset *flights* para los enlaces entre estos):
+Vamos a ver cómo se haría con los datos del paquete <a href="https://cran.r-project.org/web/packages/nycflights13/nycflights13.pdf" target="_blank">nycflights13</a>. Vamos a reconvertir el dataset *airports* en nuestro dataframe de nodos y el dataset *flights* en nuestro dataframe de enlaces):
 
-```{r leaflet-basic, exercise=TRUE, exercise.eval=TRUE}
+```{r visnetwork-basic, exercise=TRUE, exercise.eval=TRUE}
 edges <- flights[(flights$month==1 & flights$day==1 & flights$distance>2000),]
 nodes <- airports[airports$faa %in% c(edges$origin,edges$dest),]
-nodes$id <- 1:nrow(nodes)
-nodes$label <- nodes$name
-edges$from <- match(edges$origin,nodes$faa)
-edges$to <- match(edges$dest,nodes$faa)
+# rename from, to
+names(edges)[names(edges)=="origin"] <- "from"
+names(edges)[names(edges)=="dest"] <- "to"
+# rename id
+names(nodes)[names(nodes)=="faa"] <- "id"
 visNetwork(nodes, edges, width = "100%")
 ```
+
+
+## CUSTOMIZACION
+
+### Atributos de nodo
+
+En el caso de los nodos, podemos configurar los siguientes atributos:
+
+- Etiquetas: si el dataframe de nodos tiene una columna "label", esta se utiliza por defecto.
+
+*Ve descomentando, una a una, las líneas comentadas (#) del código siguiente, para observar el resultado.*
+
+```{r visnetwork-customizing-nodes, exercise=TRUE, exercise.eval=TRUE}
+edges <- flights[(flights$month==1 & flights$day==1 & flights$distance>2000),]
+nodes <- airports[airports$faa %in% c(edges$origin,edges$dest),]
+names(edges)[names(edges)=="origin"] <- "from"
+names(edges)[names(edges)=="dest"] <- "to"
+names(nodes)[names(nodes)=="faa"] <- "id"
+# names(nodes)[names(nodes)=="name"] <- "label"
+# names(nodes)[names(nodes)=="alt"] <- "value"
+# names(nodes)[names(nodes)=="dst"] <- "title"
+vn <- visNetwork(nodes, edges, width = "100%")
+visIgraphLayout(vn, randomSeed=1234)
+```
+
+
+### Atributos de enlace
+
+
+
+### Otros atributos de nodo y enlace
