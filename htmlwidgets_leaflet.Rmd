@@ -8,6 +8,7 @@ runtime: shiny_prerendered
 library(learnr)
 library(leaflet)
 library(nycflights13)
+library(htmlwidgets)
 knitr::opts_chunk$set(echo = FALSE)
 data("airports")
 ```
@@ -72,11 +73,11 @@ m
 
 Existen muchas opciones de customización de los mapas, de las que aquí destacamos unas pocas relacionadas con los marcadores:
 
-### Añadir popups o etiquetas
+### Popups o etiquetas
 
 Las funciones-marker admiten el argumento *popup*, para añadir texto a los marcadores.
 
-*Modifica el siguiente código para añadir el mensaje "UAM" al marcador*:
+*Modifica el siguiente código para añadir el mensaje "UAM" al hacer click en el marcador*:
 
 ```{r leaflet-basic-popup, exercise=TRUE, exercise.eval=TRUE}
 m <- leaflet()
@@ -90,9 +91,9 @@ addMarkers(m, lat=40.5453, lng=-3.69611, popup = "UAM")
 ```
 
 <br>
-En caso de querer utilizar alguna columna del objeto data que contenga los popups, ello se puede realizar mediante el símbolo **~** (*~name*, por ejemplo, significaría emplear la columna denominada "name" en el objeto data).
+En caso de querer utilizar alguna columna del objeto data que contenga los popups, ello se puede realizar mediante el símbolo ~ (*~name*, por ejemplo, significaría emplear la columna denominada "name" en el objeto data).
 
-*Modifica el siguiente código para añadir la columna name de airports como popup.*:
+*Modifica el siguiente código para añadir la columna name de airports como popup*:
 
 ```{r leaflet-data-popup, exercise=TRUE, exercise.eval=TRUE}
 m <- leaflet(data = head(airports))
@@ -116,9 +117,9 @@ quiz(
 )
 ```
 
-### Modificar la forma de los marcadores:
+### Forma de los marcadores:
 
-Los marcadores se pueden representar como círculos, rectángulos, incluso como imágenes...
+Los marcadores se pueden representar como círculos, rectángulos, incluso como imágenes.
 
 *Modifica el siguiente código para que los puntos se representen como círculos (función addCircleMarkers), en vez de dropped-pins.*:
 
@@ -134,7 +135,7 @@ m
 addCircleMarkers(m)
 ```
 
-### Añadir enlaces a internet:
+### Enlaces a internet:
 
 En tanto lo que se genera es un HTML, se pueden incluir elementos (tags) html, que enriquecen todavía más los marcadores. Por ejemplo, el texto de los popups puede ser un enlace a internet.
 
@@ -154,11 +155,17 @@ m
 
 ### Otras opciones:
 
-La librería leaflet, y el paquete de R para interactuar con la misma, tiene otras muchas opciones (colores, leyendas, imágenes...) para realizar mapas muy ricos. No dejes de consultar la <a href="http://rstudio.github.io/leaflet/" target="_blank">página de ayuda</a> para descubrirlas y practicar con las mismas.
+La librería leaflet, y el paquete de R para interactuar con la misma, tiene otras muchas opciones (colores, leyendas, imágenes...) para realizar mapas muy ricos tanto a nivel de marcadores como de otros elementos (tiles, polígonos...). No dejes de consultar la <a href="http://rstudio.github.io/leaflet/" target="_blank">página del proyecto</a> para descubrirlas y practicar con las mismas.
 
 ## EXPORTACION
 
-### <a href="https://igraph.org/r/doc/erdos.renyi.game.html" target="_blank">Erdős–Rényi</a>
+Como en el resto de paquetes htmlwidhwet, la función saveWidget permite grabar el objeto gráfico.
 
-El modelo **Erdős–Rényi** para grafos aleatorios (random graphs) es aquél en que, dado un número de nodos y enlaces, todos los grafos posibles son equiprobables; cada enlace tiene una probabilidad de existir independiente de los enlaces de su entorno.
-<br>*A continuación prueba a aumentar la probabilidad de que dos nodos cualesquiera estén conectados mediante el argumento "p.or.m."*
+*Modifica el nombre "map.html" por otro que más te convenga y ejecuta el código para generar el fichero html*
+
+```{r leaflet-savewidget, exercise=TRUE, exercise.eval=FALSE}
+m <- leaflet()
+m <- addTiles(m)
+m <- addMarkers(m, lat=40.5453, lng=-3.69611, popup = "<a href='http://www.uam.es/UAM/Home.htm?language=es' target='_blank'>UAM</a>")
+saveWidget(m, "~/map.html",selfcontained = T)
+```
