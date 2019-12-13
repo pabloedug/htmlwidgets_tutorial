@@ -157,15 +157,3 @@ m
 
 La librería leaflet, y el paquete de R para interactuar con la misma, tiene otras muchas opciones (colores, leyendas, imágenes...) para realizar mapas muy ricos tanto a nivel de marcadores como de otros elementos (tiles, polígonos...). No dejes de consultar la <a href="http://rstudio.github.io/leaflet/" target="_blank">página del proyecto</a> para descubrirlas y practicar con las mismas.
 
-## EXPORTACION
-
-Como en el resto de paquetes htmlwidhwet, la función saveWidget permite grabar el objeto gráfico.
-
-*Modifica el nombre "map.html" por otro que más te convenga y ejecuta el código para generar el fichero html*
-
-```{r leaflet-savewidget, exercise=TRUE, exercise.eval=FALSE}
-m <- leaflet()
-m <- addTiles(m)
-m <- addMarkers(m, lat=40.5453, lng=-3.69611, popup = "<a href='http://www.uam.es/UAM/Home.htm?language=es' target='_blank'>UAM</a>")
-saveWidget(m, "~/map.html",selfcontained = T)
-```
