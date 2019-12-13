@@ -59,6 +59,9 @@ En vez de especificar localizaciones concretas (en la función addMarkers() y ot
 - una matriz de longitudes y latitudes (dos columnas).  
 - un dataframe en que haya, al menos, dos columnas (lat y lng). Normalmente deduce qué columnas contienen latitudes y longitudes, si tienen nombres (sin discriminar mayúsculas) lat, latitude, lng, lon, long, longitude. Si tienen otro nombre, siempre se pueden identificar explícitamente.
 
+Vamos a trabajar con los datos incluidos en el paquete <a href="https://cran.r-project.org/web/packages/nycflights13/nycflights13.pdf" target="_blank">nycflights13</a>, en concreto con el dataset *airports*:
+
+
 *Modifica el siguiente código para representar, en vez de la cabecera (head), el cierre (tail) del objeto airports*:
 
 ```{r leaflet-data, exercise=TRUE, exercise.eval=TRUE}
