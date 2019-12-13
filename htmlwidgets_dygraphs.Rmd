@@ -1,0 +1,95 @@
+---
+title: "DYGRAPHS"
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(dygraphs)
+library(xts)
+library(leaflet)
+library(nycflights13)
+knitr::opts_chunk$set(echo = FALSE)
+data("airports")
+data("flights")
+```
+
+
+## INTRODUCCION
+
+### Dygraphs (JS)
+
+- <a href="http://dygraphs.com/" target="_blank">dygraphs</a> es una librería Javascript (JS) para la representación de series temporales.
+
+- Representación sencilla de información temporal. Multitud de opciones de enriquecimiento de la visualización (marcas, tooltips...) y gran agilidad en la realización de filtros.
+
+### Dygraphs para R
+
+- Interfaz entre R y la librería JS.
+
+- Disponible en <a href="https://cran.r-project.org/web/packages/dygraphs/index.html" target="_blank">repositorio CRAN</a>.
+
+- Mantenido por RStudio (copyright holder: Rstudio).
+
+- <a href="https://rstudio.github.io/dygraphs/" target="_blank">Página web de consulta</a> (Github project site) muy completa.
+
+## GENERACION BASICA
+
+### Función dygraph()
+
+La función dygraphs(), si se le especifica un formato de datos adecuado, representa una serie temporal.
+
+Vamos a trabajar con los datos del paquete <a href="https://cran.r-project.org/web/packages/nycflights13/nycflights13.pdf" target="_blank">nycflights13</a>. Vamos a utilizar el dataset *flights* para representar una serie temporal del número de vuelos:
+
+```{r dygraphs-basic-daytime, exercise=TRUE, exercise.eval=TRUE}
+# generamos una tabla con el número de vuelos por dia y hora:
+dailyflights<- data.frame(table(flights$time_hour))
+names(dailyflights) <- c("dia_hora","frecuencia")
+dailyflights$dia_hora <- as.POSIXct(dailyflights$dia_hora)
+# convert to xts
+dailyflights <- xts(dailyflights$frecuencia,order.by = dailyflights$dia_hora)
+# 
+dygraph(dailyflights)
+```
+
+Vamos a generar a continuación una serie temporal a nivel de día.
+
+```{r dygraphs-basic-day, exercise=TRUE, exercise.eval=TRUE}
+# generamos una tabla con el número de vuelos por dia:
+dailyflights<- data.frame(table(as.Date(flights$time_hour)))
+names(dailyflights) <- c("dia","frecuencia")
+dailyflights$dia <- as.Date(dailyflights$dia)
+# convert to xts
+dailyflights <- xts(dailyflights$frecuencia,order.by = dailyflights$dia)
+# 
+dygraph(dailyflights)
+```
+
+
+## CUSTOMIZACION
+
+Existen muchas opciones de customización de las series temporales:
+
+- Marcar los puntos, mediante la opción drawPoints.
+- Colorear las series, mediante la opción colors.
+- Especificar el rango de los ejes, así como su etiqueta, mediante la función dyAxis()
+- Añadir un selector de rango, mediante la función dyRangeSelector().
+- Otras muchas opciones, que puedes consultar en la <a href="https://rstudio.github.io/dygraphs/" target="_blank">página del proyecto</a>.
+
+
+*Ve descomentando, una a una, las líneas comentadas (#) del código siguiente, para observar el resultado.*
+
+```{r dygraphs-customizing-series, exercise=TRUE, exercise.eval=TRUE}
+dailyflights<- data.frame(table(as.Date(flights$time_hour)))
+names(dailyflights) <- c("dia_hora","frecuencia")
+dailyflights$dia_hora <- as.Date(dailyflights$dia_hora)
+dailyflights <- xts(dailyflights$frecuencia,order.by = dailyflights$dia_hora)
+ts <- dygraph(dailyflights)
+# ts <- dyOptions(ts,drawPoints = TRUE, pointSize = 2)
+# ts <- dyOptions(ts,colors = "red")
+# ts <- dyAxis(ts,"y", label = "Número de vuelos", valueRange = c(500, 1100))
+# ts <- dyRangeSelector(ts)
+ts
+```
+

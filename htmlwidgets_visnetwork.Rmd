@@ -1,0 +1,139 @@
+---
+title: "VISNETWORK"
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(visNetwork)
+library(nycflights13)
+knitr::opts_chunk$set(echo = FALSE)
+data("airports")
+data("flights")
+```
+
+## INTRODUCCION
+
+### vis.js (JS)
+
+- <a href="http://visjs.org" target="_blank">vis.js</a> es una librería Javascript (JS) con una serie de componentes, entre los que está Network para la visualización de redes.
+
+- Representación sencilla de información en red. Multitud de opciones de enriquecimiento de la visualización, incluida la posibilidad de utilizar filtros de nodos.
+
+### visNetwork para R
+
+- Interfaz entre R y el componente Network de la librería vis.js.
+
+- Disponible en <a href="https://cran.r-project.org/web/packages/visNetwork/index.html" target="_blank">repositorio CRAN</a>.
+
+- <a href="https://datastorm-open.github.io/visNetwork/" target="_blank">Página web de consulta</a> (Github project site) muy completa.
+
+## GENERACION BASICA
+
+Son necesarios dos dataframe para representar un grafo:
+
+- nodos. Con columna *id*.
+- enlaces. Con columnas *from* y *to* (entre ids del dataframe de nodos).
+
+Vamos a ver cómo se haría con los datos del paquete <a href="https://cran.r-project.org/web/packages/nycflights13/nycflights13.pdf" target="_blank">nycflights13</a>. Vamos a reconvertir el dataset *airports* en nuestro dataframe de nodos y el dataset *flights* en nuestro dataframe de enlaces:
+
+```{r visnetwork-basic, exercise=TRUE, exercise.eval=TRUE}
+edges <- flights[(flights$month==1 & flights$day==1 & flights$distance>2000),]
+nodes <- airports[airports$faa %in% c(edges$origin,edges$dest),]
+# rename from, to
+names(edges)[names(edges)=="origin"] <- "from"
+names(edges)[names(edges)=="dest"] <- "to"
+# rename id
+names(nodes)[names(nodes)=="faa"] <- "id"
+visNetwork(nodes, edges, width = "100%")
+```
+
+
+## CUSTOMIZACION
+
+### Atributos de nodo
+
+En el caso de los nodos, podemos configurar los siguientes atributos:
+
+- Etiquetas: mediante la columna "label" del dataframe de nodos.
+- Tamaño: mediante la columna "value".
+- Tooltip: mediante la columna "title".
+- <a href="https://datastorm-open.github.io/visNetwork/nodes.html" target="_blank">Otros atributos</a>: forma, color...
+
+*Ve descomentando, una a una, las líneas comentadas (#) del código siguiente, para observar el resultado.*
+
+```{r visnetwork-customizing-nodes, exercise=TRUE, exercise.eval=TRUE}
+edges <- flights[(flights$month==1 & flights$day==1 & flights$distance>2000),]
+nodes <- airports[airports$faa %in% c(edges$origin,edges$dest),]
+names(edges)[names(edges)=="origin"] <- "from"
+names(edges)[names(edges)=="dest"] <- "to"
+names(nodes)[names(nodes)=="faa"] <- "id"
+# names(nodes)[names(nodes)=="name"] <- "label"
+# names(nodes)[names(nodes)=="alt"] <- "value"
+# names(nodes)[names(nodes)=="dst"] <- "title"
+vn <- visNetwork(nodes, edges, width = "100%")
+visIgraphLayout(vn, randomSeed=1234)
+```
+
+
+### Atributos de enlace
+
+En el caso de los enlaces, podemos configurar los siguientes atributos:
+
+- Grosor: mediante la columna "width" del dataframe de enlaces.
+- Etiqueta: mediante la columna "label".
+- Tooltip: mediante la columna "title".
+- <a href="https://datastorm-open.github.io/visNetwork/edges.html" target="_blank">Otros atributos</a>: forma, sombra...
+
+*Ve descomentando, una a una, las líneas comentadas (#) del código siguiente, para observar el resultado.*
+
+```{r visnetwork-customizing-edges, exercise=TRUE, exercise.eval=TRUE}
+edges <- flights[(flights$month==1 & flights$day==1 & flights$distance>2000),]
+nodes <- airports[airports$faa %in% c(edges$origin,edges$dest),]
+names(edges)[names(edges)=="origin"] <- "from"
+names(edges)[names(edges)=="dest"] <- "to"
+names(nodes)[names(nodes)=="faa"] <- "id"
+names(nodes)[names(nodes)=="name"] <- "label"
+names(nodes)[names(nodes)=="alt"] <- "value"
+names(nodes)[names(nodes)=="dst"] <- "title"
+# edges$width <- edges$distance/1000
+# names(edges)[names(edges)=="distance"] <- "label"
+# names(edges)[names(edges)=="air_time"] <- "title"
+# edges$title <- paste0(edges$title," minutos")
+vn <- visNetwork(nodes, edges, width = "100%")
+# vn <- visEdges(vn,arrows = "from")
+visIgraphLayout(vn, randomSeed=1234)
+```
+
+### Grupos
+
+Finalmente, un elemento muy interesante en visnetwork es la configuración de <a href="https://datastorm-open.github.io/visNetwork/groups.html" target="_blank">grupos</a>.
+
+- Mediante la simple inclusión de una columna del dataframe de nodos denominada "group", visnetwork representa los grupos de nodos en distintos colores.
+- Mediante la función <a href="https://datastorm-open.github.io/visNetwork/legend.html" target="_blank">visLegend()</a> se incluye una leyenda de los grupos.
+- Mediante la opción <a href="https://datastorm-open.github.io/visNetwork/options.html" target="_blank">selectedBy = "group"()</a> se incluye un selector de los grupos.
+- Mediante la función <a href="https://datastorm-open.github.io/visNetwork/groups.html" target="_blank">visGroups()</a> pueden añadirse más elementos asociados a los grupos: formas, sombras...
+
+*Ve descomentando, una a una, las líneas comentadas (#) del código siguiente, para observar el resultado.*
+
+```{r visnetwork-customizing-groups, exercise=TRUE, exercise.eval=TRUE}
+edges <- flights[(flights$month==1 & flights$day==1 & flights$distance>2000),]
+nodes <- airports[airports$faa %in% c(edges$origin,edges$dest),]
+names(edges)[names(edges)=="origin"] <- "from"
+names(edges)[names(edges)=="dest"] <- "to"
+names(nodes)[names(nodes)=="faa"] <- "id"
+names(nodes)[names(nodes)=="name"] <- "label"
+names(nodes)[names(nodes)=="alt"] <- "value"
+names(nodes)[names(nodes)=="dst"] <- "title"
+# names(nodes)[names(nodes)=="tzone"] <- "group"
+edges$width <- edges$distance/1000
+names(edges)[names(edges)=="distance"] <- "label"
+names(edges)[names(edges)=="air_time"] <- "title"
+edges$title <- paste0(edges$title," minutos")
+vn <- visNetwork(nodes, edges, width = "100%")
+vn <- visEdges(vn,arrows = "from")
+# vn <- visLegend(vn)
+# vn <- visOptions(vn,selectedBy = "group")
+visIgraphLayout(vn, randomSeed=1234)
+```
