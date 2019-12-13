@@ -1,12 +1,12 @@
 # Resumen
 
-Este repositorio incluye un conjunto de ficheros .Rmd con introducción a distintos paquetes htmlwidgets.
+Este repositorio incluye un conjunto de ficheros .Rmd con introducción a distintos paquetes [htmlwidgets](http://www.htmlwidgets.org/index.html).
 
 Los ficheros son los siguientes:
 
 - **htmlwidgets_leaflet.Rmd**: cómo generar mapas interactivos mediante el paquete *leaflet*.
-- **htmlwidgets_dygraphs.Rmd**:
-- **htmlwidgets_visnetwork.Rmd**:
+- **htmlwidgets_dygraphs.Rmd**: cómo generar series temporales interactivas mediante el paquete *dygraphs*.
+- **htmlwidgets_visnetwork.Rmd**: cómo generar grafos interactivos mediante el paquete *visnetwork*.
 
 
 # Uso
