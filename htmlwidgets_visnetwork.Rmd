@@ -56,7 +56,7 @@ visNetwork(nodes, edges, width = "100%")
 
 En el caso de los nodos, podemos configurar los siguientes atributos:
 
-- Etiquetas: si el dataframe de nodos tiene una columna "label", esta se utiliza por defecto.
+- Etiquetas: mediante la columna "label" del dataframe de nodos.
 - Tamaño: mediante la columna "value".
 - Tooltip: mediante la columna "title".
 - <a href="https://datastorm-open.github.io/visNetwork/nodes.html" target="_blank">Otros atributos</a>: forma, color...
@@ -111,8 +111,9 @@ visIgraphLayout(vn, randomSeed=1234)
 Finalmente, un elemento muy interesante en visnetwork es la configuración de <a href="https://datastorm-open.github.io/visNetwork/groups.html" target="_blank">grupos</a>.
 
 - Mediante la simple inclusión de una columna del dataframe de nodos denominada "group", visnetwork representa los grupos de nodos en distintos colores.
-- Mediante la opción <a href="https://datastorm-open.github.io/visNetwork/groups.html" target="_blank">visLegend()</a> se incluye una leyenda de los grupos.
-- Mediante la opción <a href="https://datastorm-open.github.io/visNetwork/groups.html" target="_blank">visGroups()</a> pueden añadirse más elementos asociados a los grupos: formas, sombras...
+- Mediante la función <a href="https://datastorm-open.github.io/visNetwork/legend.html" target="_blank">visLegend()</a> se incluye una leyenda de los grupos.
+- Mediante la opción <a href="https://datastorm-open.github.io/visNetwork/options.html" target="_blank">selectedBy = "group"()</a> se incluye un selector de los grupos.
+- Mediante la función <a href="https://datastorm-open.github.io/visNetwork/groups.html" target="_blank">visGroups()</a> pueden añadirse más elementos asociados a los grupos: formas, sombras...
 
 *Ve descomentando, una a una, las líneas comentadas (#) del código siguiente, para observar el resultado.*
 
@@ -133,5 +134,6 @@ edges$title <- paste0(edges$title," minutos")
 vn <- visNetwork(nodes, edges, width = "100%")
 vn <- visEdges(vn,arrows = "from")
 # vn <- visLegend(vn)
+# vn <- visOptions(vn,selectedBy = "group")
 visIgraphLayout(vn, randomSeed=1234)
 ```
